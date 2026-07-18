@@ -1,0 +1,188 @@
+@base = http://localhost:3000
+
+
+# register
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "sam@testing.ca",
+  "nom": "sam",
+  "password": "sam123"
+}
+
+
+###
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "sam@testing.ca",
+  "password": "sam123"
+}
+
+
+###
+GET {{base}}/auth/me
+Authorization: Bearer {{login.response.body.token}}
+
+
+
+###
+GET {{base}}/personnages
+Authorization: Bearer {{login.response.body.token}}
+
+
+
+###
+POST {{base}}/personnages
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "nom": "Stanley",
+  "classe": "GUERRIER"
+}
+
+###
+GET {{base}}/objets?page=1&limit=10
+
+###
+POST {{base}}/objets
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "nom": "Epee de feu",
+  "rarete": "RARE",
+  "type": "ARME"
+}
+### 
+POST {{base}}/objets
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "nom": "Medaillions d'agiletee",
+  "rarete": "RARE",
+  "type": "ACCESSOIRE"
+}
+###
+POST {{base}}/objets
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "nom": "Epee de glace",
+  "rarete": "EPIQUE",
+  "type": "ARME"
+}
+
+###
+POST {{base}}/objets
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "nom": "Potion de soin",
+  "rarete": "COMMUN",
+  "type": "POTION"
+}
+###
+POST {{base}}/objets
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "nom": "Armure de Dieu",
+  "rarete": "LEGENDAIRE",
+  "type": "ARMURE"
+}
+
+###
+POST {{base}}/monstres/importer
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "limite": 5
+}
+
+
+###
+GET {{base}}/monstres?page=1&limit=10
+
+
+###
+GET {{base}}/monstres/2
+
+
+
+###
+PATCH {{base}}/monstres/2
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "pv": 250,
+  "attaque": 20
+}
+
+
+###
+DELETE {{base}}/monstres/2
+Authorization: Bearer {{login.response.body.token}}
+
+
+###
+GET {{base}}/quetes
+
+###
+POST {{base}}/quetes
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "titre": "Vaincre le dragon",
+  "difficulte": "EXTREME",
+  "statut": "DISPONIBLE",
+  "recompense": "Nouvelle armure",
+  "monstres": [3]
+}
+
+###
+GET {{base}}/quetes/2
+
+###
+POST {{base}}/quetes/2/accepter
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "personnageId": 1
+}
+
+###
+PATCH {{base}}/quetes/2/reussir
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{base}}/inventaire
+Authorization: Bearer {{login.response.body.token}}
+
+###
+POST {{base}}/inventaire
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "personnageId": 1,
+  "objetId": 1
+}
+
+###
+DELETE {{base}}/inventaire/2
+Authorization: Bearer {{login.response.body.token}}
+
+###

@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Classe {
+  GUERRIER
+  MAGE
+  VOLEUR
+  CLERC
+}
+
+enum Rarete {
+  COMMUN
+  RARE
+  EPIQUE
+  LEGENDAIRE
+}
+
+enum TypeObjet {
+  ARME
+  ARMURE
+  POTION
+  ACCESSOIRE
+}
+
+enum Difficulte {
+  FACILE
+  MOYEN
+  DIFFICILE
+  EXTREME
+}
+
+enum StatutQuete {
+  DISPONIBLE
+  EN_COURS
+  TERMINEE
+  ECHOUEE
+}
+
+
+enum Role {
+USER
+ADMIN
+}
+
+model Joueur {
+  id           Int            @id     @default(autoincrement())
+  role         Role           @default(USER)
+  nom          String
+  email        String         @unique
+  password     String
+  createdAt    DateTime       @default(now())
+  personnages  Personnage[]
+}
+
+model Personnage {
+  id           Int          @id @default(autoincrement())
+  nom          String
+  classe       Classe
+  niveau       Int          @default(1)
+  pv           Int          @default(15)
+  joueurId     Int
+  joueur       Joueur       @relation(fields: [joueurId], references: [id])
+  inventaires  Inventaire[]
+  quetesJoueur QueteJoueur[]
+}
+
+model Objet {
+  id           Int          @id @default(autoincrement())
+  nom          String
+  rarete       Rarete
+  type         TypeObjet
+  inventaires  Inventaire[]
+}
+
+model Inventaire {
+  id             Int        @id @default(autoincrement())
+  personnageId   Int
+  objetId        Int
+  quantite       Int        @default(1)
+  personnage     Personnage @relation(fields: [personnageId], references: [id])
+  objet          Objet      @relation(fields: [objetId], references: [id])
+  @@unique([personnageId, objetId])
+}
+
+model Monstre {
+  id          Int      @id @default(autoincrement())
+  nom         String   @unique
+  pv          Int
+  attaque     Int
+  quetes      Quete[]
+}
+
+model Quete {
+  id            Int          @id @default(autoincrement())
+  titre         String
+  difficulte    Difficulte
+  statut        StatutQuete
+  recompense    String
+  monstres      Monstre[]
+  joueurs       QueteJoueur[]
+}
+
+model QueteJoueur {
+  id Int @id @default(autoincrement())
+  personnageId Int
+  queteId Int
+  statut StatutQuete @default(EN_COURS)
+  personnage Personnage @relation(fields:[personnageId],references:[id])
+  quete Quete @relation(fields:[queteId],references:[id])
+
+  @@unique([personnageId,queteId])
+}
